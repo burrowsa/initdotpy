@@ -1,0 +1,1 @@
+The initdotpy library is designed to automatically import the contents of child modules/packages in a __init__.py file
