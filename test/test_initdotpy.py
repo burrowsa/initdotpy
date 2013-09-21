@@ -12,6 +12,8 @@ def test_example1():
     assert sorted(package.__all__) == ['module1', 'module2']
     assert package.module1.__name__ == 'examples.example1.module1'
     assert package.module2.__name__ == 'examples.example1.module2'
+    assert "auto_import" not in dir(package)
+    assert "auto_import_contents" not in dir(package)
 
 
 def test_example1_zip():
@@ -21,6 +23,8 @@ def test_example1_zip():
     assert sorted(package.__all__) == ['module1', 'module2']
     assert package.module1.__name__ == 'examples_zip.example1.module1'
     assert package.module2.__name__ == 'examples_zip.example1.module2'
+    assert "auto_import" not in dir(package)
+    assert "auto_import_contents" not in dir(package)
 
 
 def test_example2():
@@ -31,6 +35,8 @@ def test_example2():
     assert package.module3.__name__ == 'examples.example2.module3'
     assert package.module4.__name__ == 'examples.example2.module4'
     assert package.fox() == 'fox'
+    assert "auto_import" not in dir(package)
+    assert "auto_import_contents" not in dir(package)
 
 
 def test_example3():
@@ -44,6 +50,8 @@ def test_example3():
     assert package.A == sentinel.A
     assert package.B == sentinel.B
     assert package.C == sentinel.C
+    assert "auto_import" not in dir(package)
+    assert "auto_import_contents" not in dir(package)
 
 
 def test_example3_zip():
@@ -57,6 +65,8 @@ def test_example3_zip():
     assert package.A == sentinel.A
     assert package.B == sentinel.B
     assert package.C == sentinel.C
+    assert "auto_import" not in dir(package)
+    assert "auto_import_contents" not in dir(package)
 
     
 def test_example4():
@@ -78,6 +88,8 @@ def test_example6():
     import examples.example6 as package
     assert set(dir(package)).issuperset(['A', 'B', 'C', '__all__', 'module11'])
     assert sorted(package.__all__) == ['A', 'B', 'C', 'module11']
+    assert "auto_import" not in dir(package)
+    assert "auto_import_contents" not in dir(package)
 
 
 def test_example7():
@@ -87,3 +99,5 @@ def test_example7():
     assert 'module13' not in dir(package)
     assert sorted(package.__all__) == ['module14']
     assert package.module14.__name__ == 'examples.example7.module14'
+    assert "auto_import" not in dir(package)
+    assert "auto_import_contents" not in dir(package)
