@@ -55,8 +55,7 @@ def auto_import(parent, filename, exclude=tuple()):
     auto_import(__name__, __file__)
     
     and it will automatically import all the modules/packages contained in the package and stay up to date when you make changes to the package contents."""
-    parent_module = _auto_import(parent, filename, False, exclude)
-    delattr(parent_module, "auto_import")
+    _auto_import(parent, filename, False, exclude, auto_import)
 
 
 def auto_import_contents(parent, filename, exclude=tuple()):
@@ -75,11 +74,10 @@ def auto_import_contents(parent, filename, exclude=tuple()):
     auto_import_contents(__name__, __file__)
     
     and it will automatically import the contents from all the modules/packages contained in the package and stay up to date when you make changes to the package contents."""
-    parent_module = _auto_import(parent, filename, True, exclude)
-    delattr(parent_module, "auto_import_contents")
+    _auto_import(parent, filename, True, exclude, auto_import_contents)
 
  
-def _auto_import(parent, filename, import_contents, exclude):
+def _auto_import(parent, filename, import_contents, exclude, item_for_removal):
     parent_module = sys.modules[parent]
  
     if not hasattr(parent_module, '__all__'):
@@ -103,4 +101,8 @@ def _auto_import(parent, filename, import_contents, exclude):
             else:
                 setattr(parent_module, child, child_module)
                 parent_module.__all__.append(child)
-    return parent_module
+
+    for attr_name in dir(parent_module):
+        attr_value = getattr(parent_module, attr_name)
+        if attr_value is item_for_removal and attr_name not in parent_module.__all__:
+            delattr(parent_module, attr_name)
