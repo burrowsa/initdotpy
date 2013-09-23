@@ -56,13 +56,12 @@ def auto_import(exclude=tuple()):
     auto_import()
     
     and it will automatically import all the modules/packages contained in the package and stay up to date when you make changes to the package contents."""
-    parent_module = inspect.getmodule(inspect.stack()[1][0]) 
     
-    def add_child_to_parent(child, child_module):
+    def add_child_to_parent(parent_module, child, child_module):
         setattr(parent_module, child, child_module)
         parent_module.__all__.append(child)
     
-    _apply_to_child_modules(add_child_to_parent, parent_module, False, exclude, auto_import)
+    _auto_import_impl(add_child_to_parent, False, exclude, auto_import)
 
 
 def auto_import_contents(exclude=tuple()):
@@ -81,9 +80,8 @@ def auto_import_contents(exclude=tuple()):
     auto_import_contents()
     
     and it will automatically import the contents from all the modules/packages contained in the package and stay up to date when you make changes to the package contents."""
-    parent_module = inspect.getmodule(inspect.stack()[1][0])    
     
-    def add_child_contents_to_parent(child, child_module):
+    def add_child_contents_to_parent(parent_module, child, child_module):
         if not hasattr(child_module, '__all__'):
             raise RuntimeError("Module or package %s does not define __all__" % child)
         
@@ -96,19 +94,21 @@ def auto_import_contents(exclude=tuple()):
                 setattr(parent_module, name, getattr(child_module, name))
                 parent_module.__all__.append(name)
     
-    _apply_to_child_modules(add_child_contents_to_parent, parent_module, True, exclude, auto_import_contents)
+    _auto_import_impl(add_child_contents_to_parent, True, exclude, auto_import_contents)
 
  
-def _apply_to_child_modules(func, parent_module, import_contents, exclude, item_for_removal):
+def _auto_import_impl(func, import_contents, exclude, item_for_removal):
     """Implements auto_import and auto_import_contents"""
- 
+    
+    parent_module = inspect.getmodule(inspect.stack()[2][0]) 
+
     if not hasattr(parent_module, '__all__'):
         parent_module.__all__ = []
  
     for module_loader, child, _ in pkgutil.iter_modules([os.path.dirname(parent_module.__file__)]):
         if child not in exclude:
             child_module = module_loader.find_module(parent_module.__name__ + '.' + child).load_module(parent_module.__name__ + '.' + child)
-            func(child, child_module)
+            func(parent_module, child, child_module)
 
     for attr_name in dir(parent_module):
         attr_value = getattr(parent_module, attr_name)
