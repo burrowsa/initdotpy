@@ -9,5 +9,5 @@ from initdotpy import auto_import as this_one_gets_through
 __all__ = ['this_one_gets_through']
 
 
-auto_import(__name__, __file__)
+auto_import()
 

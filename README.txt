@@ -12,7 +12,7 @@ import subpackage3
 You can replace it with:
 
 from initdotpy import auto_import
-auto_import(__name__, __file__)
+auto_import()
 del auto_import
 
 and it will automatically import all the modules/packages contained in the package and stay up to date when you make changes to the package contents.
@@ -29,7 +29,7 @@ from subpackage3 import *
 You can just write your __init__.py as:
 
 from initdotpy import auto_import_contents
-auto_import_contents(__name__, __file__)
+auto_import_contents()
 del auto_import_contents
 
 Again this __init__.py automatically stays up to date so you need never edit it again.

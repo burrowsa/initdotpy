@@ -1,4 +1,4 @@
 """Test excluding a module"""
 
 from initdotpy import auto_import
-auto_import(__name__, __file__, exclude=set(['module13']))
+auto_import(exclude=set(['module13']))
