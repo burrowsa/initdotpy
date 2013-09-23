@@ -176,3 +176,13 @@ def test_example12():
     assert package.module24.__name__ == 'examples.example12.module24'
     assert "auto_import" not in dir(package)
     assert "auto_import_contents" not in dir(package)
+
+
+def test_example13():
+    """Test that we work properly if there is an error while importing"""
+    with pytest.raises(ImportError):
+        import examples.example13
+
+    # Before I fixed a bug then this second attempt would cause a duplicate names error
+    with pytest.raises(ImportError):
+        import examples.example13

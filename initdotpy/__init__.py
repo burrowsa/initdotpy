@@ -109,7 +109,11 @@ def _auto_import_impl(func, import_contents, exclude, item_for_removal):
  
     for module_loader, child, _ in pkgutil.iter_modules([os.path.dirname(parent_module.__file__)]):
         if child not in exclude:
-            child_module = module_loader.find_module(parent_module.__name__ + '.' + child).load_module(parent_module.__name__ + '.' + child)
+            full_child_name = parent_module.__name__ + '.' + child
+            if full_child_name in sys.modules:
+                child_module = sys.modules[full_child_name]
+            else:
+                child_module = module_loader.find_module(full_child_name).load_module(full_child_name)
             func(parent_module, child, child_module)
 
     for attr_name in dir(parent_module):
