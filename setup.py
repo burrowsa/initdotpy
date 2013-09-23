@@ -11,7 +11,7 @@
 
 if __name__ == "__main__":
     params = dict(name="initdotpy",
-        version="0.0.0",
+        version="0.0.1",
         description="Automates imports in __init__.py file",
         author="Andrew Burrows",
         author_email="burrowsa@gmail.com",
