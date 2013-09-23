@@ -30,4 +30,4 @@ You can just write your __init__.py as:
 from initdotpy import auto_import_contents
 auto_import_contents()
 
-In this case every submodule/subpackage must have an __ALL__ defined and there must not be duplicate definitions of the same name. Again this __init__.py automatically stays up to date so you need never edit it again.
+In this case every submodule/subpackage must have an __all__ defined and there must not be duplicate definitions of the same name. Again this __init__.py automatically stays up to date so you need never edit it again.
