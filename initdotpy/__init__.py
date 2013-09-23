@@ -57,7 +57,12 @@ def auto_import(exclude=tuple()):
     
     and it will automatically import all the modules/packages contained in the package and stay up to date when you make changes to the package contents."""
     parent_module = inspect.getmodule(inspect.stack()[1][0]) 
-    _auto_import(parent_module, False, exclude, auto_import)
+    
+    def add_child_to_parent(child, child_module):
+        setattr(parent_module, child, child_module)
+        parent_module.__all__.append(child)
+    
+    _apply_to_child_modules(add_child_to_parent, parent_module, False, exclude, auto_import)
 
 
 def auto_import_contents(exclude=tuple()):
@@ -77,10 +82,25 @@ def auto_import_contents(exclude=tuple()):
     
     and it will automatically import the contents from all the modules/packages contained in the package and stay up to date when you make changes to the package contents."""
     parent_module = inspect.getmodule(inspect.stack()[1][0])    
-    _auto_import(parent_module, True, exclude, auto_import_contents)
+    
+    def add_child_contents_to_parent(child, child_module):
+        if not hasattr(child_module, '__all__'):
+            raise RuntimeError("Module or package %s does not define __all__" % child)
+        
+        duplicates = set(child_module.__all__).intersection(parent_module.__all__)
+        if duplicates:
+            raise RuntimeError("The following names, defined in %s, are already defined elsewhere: %s"
+                               % (child, duplicates))
+        else:
+            for name in child_module.__all__:
+                setattr(parent_module, name, getattr(child_module, name))
+                parent_module.__all__.append(name)
+    
+    _apply_to_child_modules(add_child_contents_to_parent, parent_module, True, exclude, auto_import_contents)
 
  
-def _auto_import(parent_module, import_contents, exclude, item_for_removal):
+def _apply_to_child_modules(func, parent_module, import_contents, exclude, item_for_removal):
+    """Implements auto_import and auto_import_contents"""
  
     if not hasattr(parent_module, '__all__'):
         parent_module.__all__ = []
@@ -88,21 +108,7 @@ def _auto_import(parent_module, import_contents, exclude, item_for_removal):
     for module_loader, child, _ in pkgutil.iter_modules([os.path.dirname(parent_module.__file__)]):
         if child not in exclude:
             child_module = module_loader.find_module(parent_module.__name__ + '.' + child).load_module(parent_module.__name__ + '.' + child)
-            if import_contents:
-                if not hasattr(child_module, '__all__'):
-                    raise RuntimeError("Module or package %s does not define __all__" % child)
-     
-                duplicates = set(child_module.__all__).intersection(parent_module.__all__)
-                if duplicates:
-                    raise RuntimeError("The following names, defined in %s, are already defined elsewhere: %s"
-                                       % (child, duplicates))
-                else:
-                    for name in child_module.__all__:
-                        setattr(parent_module, name, getattr(child_module, name))
-                        parent_module.__all__.append(name)
-            else:
-                setattr(parent_module, child, child_module)
-                parent_module.__all__.append(child)
+            func(child, child_module)
 
     for attr_name in dir(parent_module):
         attr_value = getattr(parent_module, attr_name)
