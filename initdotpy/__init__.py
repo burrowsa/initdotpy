@@ -79,7 +79,9 @@ def auto_import_contents(exclude=tuple()):
     from initdotpy import auto_import_contents
     auto_import_contents()
     
-    and it will automatically import the contents from all the modules/packages contained in the package and stay up to date when you make changes to the package contents."""
+    In this case every submodule/subpackage must have an __ALL__ defined and there must not be duplicate definitions of
+    the same name. It will automatically import the contents from all the modules/packages contained in the package
+    and stay up to date when you make changes to the package contents."""
     
     def add_child_contents_to_parent(parent_module, child, child_module):
         if not hasattr(child_module, '__all__'):
