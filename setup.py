@@ -1,9 +1,9 @@
-# initdotpy.fluent
-# Matchers and Stubs for mock.
-# Copyright (C) 2012 Andrew Burrows
+# initdotpy
+# makes it simple to write __init__.py files.
+# Copyright (C) 2012-13 Andrew Burrows
 # E-mail: burrowsa AT gmail DOT com
 
-# initdotpy 0.0.1
+# initdotpy 0.0.3
 # https://github.com/burrowsa/initdotpy
 
 # Released subject to the BSD License
@@ -11,7 +11,7 @@
 
 if __name__ == "__main__":
     params = dict(name="initdotpy",
-        version="0.0.2",
+        version="0.0.3",
         description="Automates imports in __init__.py file",
         author="Andrew Burrows",
         author_email="burrowsa@gmail.com",
@@ -36,7 +36,6 @@ if __name__ == "__main__":
     except ImportError:
         from distutils.core import setup
     else:
-        #params['install_requires'] = ['mock>=0.8.0']
         pass
 
     setup(**params)
