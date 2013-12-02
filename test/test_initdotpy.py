@@ -80,7 +80,8 @@ def test_example5():
     """Tests importing module contents with a duplicate name"""
     with pytest.raises(RuntimeError) as err:
         import examples.example5 as package
-    assert str(err.value) == "The following names, defined in module9, are already defined elsewhere: set(['Z'])"
+    assert str(err.value) == "The following names, defined in module9, are already defined elsewhere: set(['Z'])" \
+        or str(err.value) == "The following names, defined in module9, are already defined elsewhere: {'Z'}"
     
 
 def test_example6():
