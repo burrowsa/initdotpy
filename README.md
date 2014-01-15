@@ -1,6 +1,6 @@
-The initdotpy package makes it simple to write __init__.py files that automatically include the package contents.
+The initdotpy package makes it simple to write \_\_init\_\_.py files that automatically include the package contents.
 
-For example if you have an __init__.py that looks like:
+For example if you have an \_\_init\_\_.py that looks like:
 
     import submodule1 
     import submodule2 
@@ -25,12 +25,12 @@ Or if you prefer to import the contents of the submodules/subpackages, e.g.:
     from subpackage2 import *
     from subpackage3 import *
 
-You can just write your __init__.py as:
+You can just write your \_\_init\_\_.py as:
 
     from initdotpy import auto_import_contents
     auto_import_contents()
 
-In this case every submodule/subpackage must have an __all__ defined and there must not be duplicate definitions of the same name. Again this __init__.py automatically stays up to date so you need never edit it again.
+In this case every submodule/subpackage must have an \_\_all\_\_ defined and there must not be duplicate definitions of the same name. Again this \_\_init\_\_.py automatically stays up to date so you need never edit it again.
 
 
 [![Build Status](https://travis-ci.org/burrowsa/initdotpy.png?branch=master)](https://travis-ci.org/burrowsa/initdotpy)
